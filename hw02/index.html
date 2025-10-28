@@ -81,53 +81,6 @@
       content: "完成";
   }
 
-  body {
-    background-color: rgb(106, 76, 156); /* #6A4C9C */
-    color: rgb(106, 76, 156);
-    font-family: 'CircleFont', 'Noto Sans JP', serif;
-  }
-
-  .container-fluid {
-    width:  90%;
-  }
-
-  .hw12 {
-    border: 1px solid rgb(159, 53, 58);
-    margin-top: 8px;
-    margin-bottom: 8px;
-  }
-
-  .twenty {
-    border: 1px solid #f9eced;
-    color: #f9eced;
-    padding: 8px;
-    font-size: 18pt;
-  }
-
-  .twenty a {
-    color:  yellow;
-  }
-
-  .twenty a:hover {
-    color: #f9eced;
-    font-size:  16pt;
-  }
-
-  .twenty:hover {
-      box-shadow: 0 0 5px 3px #f9eced;
-      color: cyan; 
-      text-shadow: 0 0 6px #FFFFFF, 0 0 6px #000000;
-  }
-
-  .toprow {
-    margin-top: 36px;
-  }
-
-  .bottomrow {
-    margin-bottom: 36px;
-  }
-</style>
-</head>
 <body>
 
 <div class="container-fluid">
@@ -153,7 +106,8 @@
   <!-- ------------------------------------------------>
   <div class="row hw12">
     <div class="col-md-12 twenty">
-      這次實驗讓我更熟悉了影像分割任務的整體流程，從資料下載、環境設定到模型訓練與推論，每一步都需要仔細確認路徑與參數。實際操作 3D U-Net 時，我發現醫學影像資料的處理比想像中更複雜，也更容易受到記憶體限制影響。透過不斷修正錯誤，我學會了如何掛載 Google Drive、使用 gdown 下載資料，以及在 Colab 上穩定執行大型模型。整體過程雖然繁瑣，但看到模型成功產生分割結果時，感覺非常有成就感。
+      這次作業的心臟肌肉訓練我覺得很有趣，可以從電腦斷層影像從零到有訓練出一顆心臟也很有成就感，
+      雖然要花的時間很多，但是很好玩，也學習到兩項新的工具 Colab 和 3D U-Net。
     </div>
   </div>
 
@@ -171,81 +125,60 @@
           <td rowspan="4" id="myTotal"></td>
           <td><input type="checkbox" class="flipswitch" id="myCheckbox1" checked></td>
           <td id='m1'>4</td>
-          <td>Simple baseline - 描述</td>
+          <td>Simple baseline - 完成 Colab baseline 的訓練並產生權重檔</td>
         </tr>
         <tr>
           <td><input type="checkbox" class="flipswitch" id="myCheckbox2" checked></td>
           <td id='m2'>4</td>
-          <td>Medium baseline - 描述</td>
+          <td>Medium baseline - 調整並增加使用的訓練資料集 (AICUP_training.json)</td>
         </tr>
         <tr>
           <td><input type="checkbox" class="flipswitch" id="myCheckbox3" checked></td>
           <td id='m3'>2</td>
-          <td>Strong baseline - 描述</td>
+          <td>Strong baseline - 使用其他模型 (Attn U-Net、UNETR、Swin UNETR...) 進行訓練，並繳交 Colab 程式碼。</td>
         </tr>
         <tr>
           <td><input type="checkbox" class="flipswitch" id="myCheckbox4"></td>
           <td id='m4'>-10</td>
-          <td>沒有寫100字心得</td>
+          <td>沒有寫 100 字心得</td>
         </tr>
-
       </table>
     </div>
   </div>
 
   <!-- ------------------------------------------------>
-  <div class="row hw12 bottomrow">
+  <div class="row hw12">
     <div class="col-md-12 twenty">
-      <video id="video1" style="width:100%;max-width:100%;" controls="">
-        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-      </video>
+      <h4>Simple Baseline Dice 分數圖片</h4>
+      <img src="simple_dice.png" alt="Simple Baseline Dice" style="width:100%;max-width:600px;">
+      <h4>Medium Baseline Dice 分數圖片</h4>
+      <img src="medium_dice.png" alt="Medium Baseline Dice" style="width:100%;max-width:600px;">
+      <h4>Strong Baseline Colab 連結</h4>
+      <a href="https://colab.research.google.com/drive/1iC7i_EWCZsCr5T-7jDD77V8dt_simGsn?usp=sharing" target="_blank">
+        開啟 Strong Baseline Colab
+      </a>
+      <h4>Strong Baseline Dice 分數圖片（使用 Attention U-Net）</h4>
+      <img src="strong_dice.png" alt="Strong Baseline Dice" style="width:100%;max-width:600px;">
     </div>
   </div>
 
-  <!-- ------------------------------------------------>
-
-  <!-- ------------------------------------------------>
-
+</div>
 
 <script>
-  $(function() {
-    var f = function() {
-      $(this).next().text($(this).is(':checked') ? '做完' : '未做完');
-    };
-    $('input').change(f).trigger('change');
-  });
-
+  // 保留原本的打勾加總程式碼
   d3.select("#myCheckbox1").on("change",update);
   d3.select("#myCheckbox2").on("change",update);
   d3.select("#myCheckbox3").on("change",update);
   d3.select("#myCheckbox4").on("change",update);
-  // d3.select("#myCheckbox5").on("change",update);
-  // d3.select("#myCheckbox6").on("change",update);
-  // d3.select("#myCheckbox7").on("change",update);
 
   update();
   
   function update(){
-
     var score = 0;
-
-    if (d3.select("#myCheckbox1").property("checked")){
-      score += parseInt(d3.select('#m1').html());
-    }
-
-    if (d3.select("#myCheckbox2").property("checked")){
-      score += parseInt(d3.select('#m2').html());   
-    }
-
-    if (d3.select("#myCheckbox3").property("checked")){
-      score += parseInt(d3.select('#m3').html());   
-    }
-
-    if (d3.select("#myCheckbox4").property("checked")){
-      score += parseInt(d3.select('#m4').html());   
-    }
-
-
+    if (d3.select("#myCheckbox1").property("checked")) score += parseInt(d3.select('#m1').html());
+    if (d3.select("#myCheckbox2").property("checked")) score += parseInt(d3.select('#m2').html());
+    if (d3.select("#myCheckbox3").property("checked")) score += parseInt(d3.select('#m3').html());
+    if (d3.select("#myCheckbox4").property("checked")) score += parseInt(d3.select('#m4').html());
     d3.select("#myTotal").html(score);    
   }
 </script>
